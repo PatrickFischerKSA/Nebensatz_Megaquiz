@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>3-fache Nebensatzanalyse – Megaquiz (100 Sätze)</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 30px; max-width: 1100px; margin:auto; }
+.question { border:1px solid #ddd; padding:20px; border-radius:8px; margin-bottom:25px; }
+h1 { margin-top:0; }
+h2 { margin-top:0; font-size:1.1em; }
+.select-block { margin-bottom:12px; }
+.correct { color:green; font-weight:bold; }
+.wrong { color:darkred; font-weight:bold; }
+.explanation { background:#f5f5f5; padding:10px; border-left:4px solid #777; margin-top:8px; }
+label { font-weight:bold; }
+select { min-width:260px; }
+</style>
+
+<script>
+// ============= Auswertung =============
+function checkSentence(id, category, correctAnswer, explanationText) {
+  const sel = document.getElementById(id + "_" + category);
+  const fb = document.getElementById("fb_" + id + "_" + category);
+  if (!sel) return;
+  const user = (sel.value || "").toLowerCase().trim();
+  const corr = correctAnswer.toLowerCase().trim();
+
+  if (!user) {
+    fb.innerHTML = "<p class='wrong'>Bitte zuerst etwas auswählen.</p>";
+    return;
+  }
+
+  if (user === corr) {
+    fb.innerHTML = "<p class='correct'>✔ Richtig!</p><div class='explanation'>" + explanationText + "</div>";
+  } else {
+    fb.innerHTML =
+      "<p class='wrong'>✘ Falsch.</p><div class='explanation'>Richtige Lösung: <b>" +
+      correctAnswer +
+      "</b><br>" +
+      explanationText +
+      "</div>";
+  }
+}
+
+// ============= Daten: 100 Sätze =============
+// Jede Zeile: id, text, formal, funktional, inhalt, plus kurze Erklärungen
+const sentences = [
+  // 1–10
+  {
+    id: "s1",
+    text: "Ich bleibe zu Hause, weil ich müde bin.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ ist eine unterordnende Konjunktion → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz nennt den Grund für das Bleiben → Adverbialsatz.",
+    explInhalt: "Inhaltlich wird ein Grund angegeben → kausaler Nebensatz."
+  },
+  {
+    id: "s2",
+    text: "Die Frau, die dort sitzt, ist meine Lehrerin.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Ein Relativpronomen („die“) leitet den Nebensatz ein → Relativ-/Pronominalsatz.",
+    explFunktional: "Der Nebensatz beschreibt „Frau“ näher → Attributsatz.",
+    explInhalt: "Relativsätze haben keine adverbiale (zeitliche, kausale etc.) Bedeutung, sondern bestimmen ein Nomen näher."
+  },
+  {
+    id: "s3",
+    text: "Er fragt sich, ob er genug gelernt hat.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ leitet hier eine indirekte Frage ein → indirekter Fragesatz.",
+    explFunktional: "Der Nebensatz ist der Inhalt dessen, was er sich fragt → Objektsatz.",
+    explInhalt: "Der Nebensatz drückt keinen Umstandsbezug (Zeit, Grund usw.) aus, sondern den Frageinhalt."
+  },
+  {
+    id: "s4",
+    text: "Weil er krank war, blieb er zu Hause.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "Auch hier leitet „weil“ einen Konjunktionalsatz ein.",
+    explFunktional: "Der Nebensatz bestimmt das Verb „blieb“ näher (Grund) → Adverbialsatz.",
+    explInhalt: "Inhaltlich wird der Grund des Zu-Hause-Bleibens genannt → kausal."
+  },
+  {
+    id: "s5",
+    text: "Wer fleissig übt, wird besser.",
+    formal: "Uneingeleiteter Nebensatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Der Nebensatz steht voran, hat Verbendstellung, aber keine Konjunktion → uneingeleiteter Nebensatz.",
+    explFunktional: "„wer fleissig übt“ ersetzt das Subjekt („wer wird besser?“) → Subjektsatz.",
+    explInhalt: "Der Nebensatz beschreibt eine Bedingung/Gruppe von Personen, aber nicht als Adverbialsatz klassifiziert."
+  },
+  {
+    id: "s6",
+    text: "Ich weiss, dass du recht hast.",
+    formal: "Konjunktionalsatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ leitet einen Konjunktionalsatz ein.",
+    explFunktional: "Der Nebensatz ist das Objekt zu „ich weiss“ („was weiss ich?“) → Objektsatz.",
+    explInhalt: "Der Nebensatz ist inhaltsangabe, aber kein Adverbialsatz (kein Zeit-/Grund-/Zweckbezug)."
+  },
+  {
+    id: "s7",
+    text: "Als er ankam, begann das Konzert.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„als“ fungiert als unterordnende Konjunktion → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz bestimmt den Zeitpunkt des Beginns → Adverbialsatz.",
+    explInhalt: "Es wird ein Zeitpunkt genannt → temporaler Nebensatz."
+  },
+  {
+    id: "s8",
+    text: "Ich bin sicher, dass er kommt.",
+    formal: "Konjunktionalsatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz ist der Inhalt der Sicherheit („worin bin ich sicher?“) → Objektsatz.",
+    explInhalt: "Keine Umstandsangabe, sondern Inhalt → keine adverbiale Kategorie."
+  },
+  {
+    id: "s9",
+    text: "Der Mann, der dort steht, ist mein Onkel.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „der“ → Relativsatz.",
+    explFunktional: "Der Nebensatz charakterisiert „Mann“ näher → Attributsatz.",
+    explInhalt: "Es geht um eine Beschreibung des Nomens, nicht um eine adverbiale Funktion."
+  },
+  {
+    id: "s10",
+    text: "Ich bleibe, wenn du bleibst.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ leitet einen untergeordneten Konjunktionalsatz ein.",
+    explFunktional: "Der Nebensatz gibt eine Bedingung für das Bleiben → Adverbialsatz.",
+    explInhalt: "„wenn“ im Sinn von „falls“ → konditionaler Nebensatz."
+  },
+
+  // 11–20
+  {
+    id: "s11",
+    text: "Er fährt so schnell, dass es gefährlich wird.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konsekutiv",
+    explFormal: "„dass“ leitet den Nebensatz ein → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz beschreibt die Folge des schnellen Fahrens → Adverbialsatz.",
+    explInhalt: "Es wird eine Folge („es wird gefährlich“) ausgedrückt → konsekutiver Nebensatz."
+  },
+  {
+    id: "s12",
+    text: "Seit er hier wohnt, ist er glücklicher.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„seit“ fungiert als unterordnende Konjunktion → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz bestimmt Zeitraum/Beginn des Glücklichseins → Adverbialsatz.",
+    explInhalt: "„seit“ → zeitliche Dauer → temporaler Nebensatz."
+  },
+  {
+    id: "s13",
+    text: "Obwohl es regnet, gehen wir spazieren.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ ist eine Konjunktion → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz gibt einen Gegengrund zum Spazierengehen → Adverbialsatz.",
+    explInhalt: "Gegengrund („trotz Regen“) → konzessiver Nebensatz."
+  },
+  {
+    id: "s14",
+    text: "Damit du pünktlich bist, stell dir den Wecker.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "final",
+    explFormal: "„damit“ leitet einen untergeordneten Konjunktionalsatz ein.",
+    explFunktional: "Der Nebensatz bestimmt den Zweck des Weckerstellens → Adverbialsatz.",
+    explInhalt: "Zweck („wozu?“) → finaler Nebensatz."
+  },
+  {
+    id: "s15",
+    text: "Indem er leise sprach, beruhigte er das Kind.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„indem“ ist eine Konjunktion → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz beschreibt, wie er das Kind beruhigte → Adverbialsatz.",
+    explInhalt: "Art und Weise („auf welche Weise?“) → modaler Nebensatz."
+  },
+  {
+    id: "s16",
+    text: "Dass du kommst, freut mich.",
+    formal: "Konjunktionalsatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ leitet den Nebensatz ein → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz übernimmt die Subjektfunktion („was freut mich?“) → Subjektsatz.",
+    explInhalt: "Es wird keine Umstandsbeziehung angegeben, sondern ein Sachverhalt als Subjekt."
+  },
+  {
+    id: "s17",
+    text: "Die Nachricht, dass die Schule ausfällt, verbreitete sich schnell.",
+    formal: "Konjunktionalsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ leitet einen Nebensatz ein → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz erläutert den Inhalt der Nachricht → Attributsatz.",
+    explInhalt: "Der Nebensatz gehört inhaltlich zu „Nachricht“ und ist kein Adverbialsatz."
+  },
+  {
+    id: "s18",
+    text: "Es stört mich, dass du so spät kommst.",
+    formal: "Konjunktionalsatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ → Konjunktionalsatz.",
+    explFunktional: "„was stört mich?“ → Nebensatz als Objekt.",
+    explInhalt: "Der Nebensatz ist inhaltliche Ergänzung, kein Umstand."
+  },
+  {
+    id: "s19",
+    text: "Seit du hier bist, ist es lustiger.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„seit“ fungiert als Konjunktion.",
+    explFunktional: "Der Nebensatz gibt den Zeitraum an → Adverbialsatz.",
+    explInhalt: "Zeitliche Beziehung → temporaler Nebensatz."
+  },
+  {
+    id: "s20",
+    text: "Kaum war er eingeschlafen, klingelte das Telefon.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„kaum“ fungiert hier zusammen mit der Nebensatzstruktur als Konjunktion.",
+    explFunktional: "Bestimmt den Zeitpunkt des Klingelns → Adverbialsatz.",
+    explInhalt: "Zeitliches Vorher-Nachher → temporaler Nebensatz."
+  },
+
+  // 21–30
+  {
+    id: "s21",
+    text: "Der Junge, dessen Fahrrad gestohlen wurde, ist traurig.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dessen“ ist ein Relativpronomen → Relativsatz.",
+    explFunktional: "Der Nebensatz bezieht sich auf „Junge“ → Attributsatz.",
+    explInhalt: "Es wird keine Umstandsbeziehung, sondern eine Eigenschaft des Jungen beschrieben."
+  },
+  {
+    id: "s22",
+    text: "Er dachte, er sei schon gegangen.",
+    formal: "Uneingeleiteter Nebensatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Der Nebensatz ist nicht durch eine Konjunktion eingeleitet, Verbendstellung → uneingeleitet.",
+    explFunktional: "„was dachte er?“ → Nebensatz als Objekt.",
+    explInhalt: "Kein Adverbialsatz, sondern Inhalt des Denkens."
+  },
+  {
+    id: "s23",
+    text: "Alle, die hier wohnen, kennen sich.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„die“ als Relativpronomen → Relativsatz.",
+    explFunktional: "Bestimmt „alle“ näher → Attributsatz.",
+    explInhalt: "Keine kausale, temporale etc. Beziehung, sondern Nominalbestimmung."
+  },
+  {
+    id: "s24",
+    text: "Es ist unklar, wer eingeladen wurde.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Fragewort „wer“ → indirekter Fragesatz.",
+    explFunktional: "Der Nebensatz benennt, was unklar ist → inhaltliches Subjekt.",
+    explInhalt: "Kein Umstand, sondern eine offene Frage als Sachverhalt."
+  },
+  {
+    id: "s25",
+    text: "Was du sagst, interessiert mich.",
+    formal: "Pronominalsatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„was“ ist ein Relativ-/Pronominalwort mit Verbendstellung → Pronominalsatz.",
+    explFunktional: "„was interessiert mich?“ → Nebensatz als Subjekt.",
+    explInhalt: "Keine adverbiale Bedeutung, da kein Umstandsbezug ausgedrückt wird."
+  },
+  {
+    id: "s26",
+    text: "Ich erinnere mich, wie wir damals gefeiert haben.",
+    formal: "Pronominalsatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„wie“ fungiert hier als Pronominalwort → Pronominalsatz.",
+    explFunktional: "„woran erinnere ich mich?“ → Nebensatz als Objekt.",
+    explInhalt: "Es wird eine Erinnerung konkretisiert, kein adverbialer Umstand."
+  },
+  {
+    id: "s27",
+    text: "Wenn du willst, helfe ich dir.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz nennt die Bedingung für das Helfen → Adverbialsatz.",
+    explInhalt: "Bedingung („unter welcher Voraussetzung?“) → konditionaler Nebensatz."
+  },
+  {
+    id: "s28",
+    text: "Sobald er gegessen hatte, legte er sich hin.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ fungiert als Konjunktion.",
+    explFunktional: "Zeitliche Einordnung der Handlung „legte sich hin“ → Adverbialsatz.",
+    explInhalt: "„sobald“ → temporaler Nebensatz (Zeitpunkt)."
+  },
+  {
+    id: "s29",
+    text: "Falls es regnet, bleiben wir drinnen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„falls“ → unterordnende Konjunktion.",
+    explFunktional: "Bedingung für „wir bleiben drinnen“ → Adverbialsatz.",
+    explInhalt: "Bedingungsbeziehung → konditionaler Nebensatz."
+  },
+  {
+    id: "s30",
+    text: "Je mehr du übst, desto leichter wird es.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "Die Vergleichskonstruktion mit „je ... desto“ zählt zu den Konjunktionalsätzen.",
+    explFunktional: "Der Nebensatz beschreibt das Verhältnis von Üben und Leichtigkeit → Adverbialsatz.",
+    explInhalt: "Art und Weise des Zusammenhangs → modaler Nebensatz."
+  },
+
+  // 31–40
+  {
+    id: "s31",
+    text: "Bevor wir gehen, räumen wir auf.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„bevor“ → Konjunktionalsatz.",
+    explFunktional: "Zeitliche Bestimmung von „räumen wir auf“ → Adverbialsatz.",
+    explInhalt: "Vorangestellter Zeitpunkt → temporaler Nebensatz."
+  },
+  {
+    id: "s32",
+    text: "Nachdem er gegessen hatte, machte er die Hausaufgaben.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„nachdem“ → Konjunktionalsatz.",
+    explFunktional: "Zeitliche Abfolge der Handlungen → Adverbialsatz.",
+    explInhalt: "Zeitliche Nachordnung → temporaler Nebensatz."
+  },
+  {
+    id: "s33",
+    text: "Da er den Zug verpasst hatte, kam er zu spät.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„da“ fungiert hier kausal als Konjunktion.",
+    explFunktional: "Begründet das Zuspätkommen → Adverbialsatz.",
+    explInhalt: "Grundangabe → kausaler Nebensatz."
+  },
+  {
+    id: "s34",
+    text: "Obwohl sie gelernt hatte, bestand sie die Prüfung nicht.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ → Konjunktionalsatz.",
+    explFunktional: "Gegengrund zur nicht bestandenen Prüfung → Adverbialsatz.",
+    explInhalt: "Widerspruch zur Erwartung → konzessiver Nebensatz."
+  },
+  {
+    id: "s35",
+    text: "Sobald der Unterricht endet, gehe ich nach Hause.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Zeitpunkt der Handlung „gehe ich“ → Adverbialsatz.",
+    explInhalt: "Zeitliche Beziehung → temporaler Nebensatz."
+  },
+  {
+    id: "s36",
+    text: "Wenn es wärmer wird, sitzen wir draussen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für „sitzen wir draussen“ → Adverbialsatz.",
+    explInhalt: "Bedingungsbeziehung → konditionaler Nebensatz."
+  },
+  {
+    id: "s37",
+    text: "Weil die Strassen glatt waren, kam es zu Unfällen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Begründet das Eintreten der Unfälle → Adverbialsatz.",
+    explInhalt: "Grundangabe → kausaler Nebensatz."
+  },
+  {
+    id: "s38",
+    text: "Ob es regnet, ist noch ungewiss.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "Der Nebensatz ist das Subjekt („was ist ungewiss?“) → Subjektsatz.",
+    explInhalt: "Kein Umstand, sondern ein ungeklärter Sachverhalt."
+  },
+  {
+    id: "s39",
+    text: "Die Hoffnung, dass es besser wird, gibt ihm Kraft.",
+    formal: "Konjunktionalsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz erläutert den Inhalt von „Hoffnung“ → Attributsatz.",
+    explInhalt: "Kein adverbialer Bezug, sondern Inhalt eines Nomens."
+  },
+  {
+    id: "s40",
+    text: "Ich hoffe, dass alles gut ausgeht.",
+    formal: "Konjunktionalsatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„dass“ leitet den Nebensatz ein.",
+    explFunktional: "„worauf hoffe ich?“ → Nebensatz als Objekt.",
+    explInhalt: "Kein Umstand, sondern Inhalt der Hoffnung."
+  },
+
+  // 41–50
+  {
+    id: "s41",
+    text: "Das Buch, das ich lese, ist spannend.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„das“ als Relativpronomen → Relativsatz.",
+    explFunktional: "Beschreibt „Buch“ näher → Attributsatz.",
+    explInhalt: "Kein adverbialer, sondern attributiver Nebensatz."
+  },
+  {
+    id: "s42",
+    text: "Der Schüler, der die Aufgabe zuerst löste, bekam einen Preis.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „der“ → Relativsatz.",
+    explFunktional: "Bestimmt „Schüler“ näher → Attributsatz.",
+    explInhalt: "Keine Umstandsangabe, sondern Charakterisierung."
+  },
+  {
+    id: "s43",
+    text: "Er wusste nicht, warum alle lachten.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„warum“ → indirekter Fragesatz.",
+    explFunktional: "„was wusste er nicht?“ → Nebensatz als Objekt.",
+    explInhalt: "Der Grund des Lachens ist Inhalt der Unwissenheit, kein adverbialer Bezug zum Matrixverb."
+  },
+  {
+    id: "s44",
+    text: "Wir werden gehen, sobald der Film zu Ende ist.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Der Nebensatz gibt an, wann wir gehen → Adverbialsatz.",
+    explInhalt: "Zeitlicher Bezug → temporaler Nebensatz."
+  },
+  {
+    id: "s45",
+    text: "Damit er nicht friert, zieht er eine Jacke an.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "final",
+    explFormal: "„damit“ → Konjunktionalsatz.",
+    explFunktional: "Zweck des Jacke-Anziehens → Adverbialsatz.",
+    explInhalt: "Zweckbeziehung → finaler Nebensatz."
+  },
+  {
+    id: "s46",
+    text: "Da er kein Geld hatte, blieb er zu Hause.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„da“ → kausale Konjunktion.",
+    explFunktional: "Grund für das Zu-Hause-Bleiben → Adverbialsatz.",
+    explInhalt: "Kausale Beziehung."
+  },
+  {
+    id: "s47",
+    text: "Obwohl sie müde war, machte sie weiter.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ → Konjunktionalsatz.",
+    explFunktional: "Gegengrund → Adverbialsatz.",
+    explInhalt: "Widerspruch zur Erwartung → konzessiver Nebensatz."
+  },
+  {
+    id: "s48",
+    text: "Weil die Sonne scheint, ist es warm.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Begründet „es ist warm“ → Adverbialsatz.",
+    explInhalt: "Grundbeziehung → kausaler Nebensatz."
+  },
+  {
+    id: "s49",
+    text: "Wenn du leise bist, hört dir jeder zu.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für das Zuhören → Adverbialsatz.",
+    explInhalt: "Bedingung → konditionaler Nebensatz."
+  },
+  {
+    id: "s50",
+    text: "Er war so müde, dass er im Sitzen einschlief.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konsekutiv",
+    explFormal: "„dass“ → Konjunktionalsatz.",
+    explFunktional: "Folge seines Müde-Seins → Adverbialsatz.",
+    explInhalt: "Folgenangabe → konsekutiver Nebensatz."
+  },
+
+  // 51–60
+  {
+    id: "s51",
+    text: "Wir blieben, bis es dunkel wurde.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„bis“ → Konjunktionalsatz.",
+    explFunktional: "Bestimmt, wie lange wir blieben → Adverbialsatz.",
+    explInhalt: "Zeitgrenze → temporaler Nebensatz."
+  },
+  {
+    id: "s52",
+    text: "Sobald er Zeit hat, meldet er sich.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Zeitpunkt des Meldens → Adverbialsatz.",
+    explInhalt: "Zeitliche Bedingung → temporaler Nebensatz."
+  },
+  {
+    id: "s53",
+    text: "Indem sie lachte, löste sie die Spannung.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„indem“ → Konjunktionalsatz.",
+    explFunktional: "Wie wurde die Spannung gelöst? → Adverbialsatz.",
+    explInhalt: "Art und Weise → modaler Nebensatz."
+  },
+  {
+    id: "s54",
+    text: "Als sie das hörte, wurde sie nervös.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„als“ → Konjunktionalsatz.",
+    explFunktional: "Zeitpunkt des Nervöswerdens → Adverbialsatz.",
+    explInhalt: "Zeitliche Einordnung → temporaler Nebensatz."
+  },
+  {
+    id: "s55",
+    text: "Nachdem sie angekommen waren, gingen sie essen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„nachdem“ → Konjunktionalsatz.",
+    explFunktional: "Reihenfolge der Handlungen → Adverbialsatz.",
+    explInhalt: "Zeitliche Abfolge → temporaler Nebensatz."
+  },
+  {
+    id: "s56",
+    text: "Ob er kommt, ist fraglich.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "„was ist fraglich?“ → Nebensatz als Subjekt.",
+    explInhalt: "Es wird kein Umstand, sondern eine Möglichkeit thematisiert."
+  },
+  {
+    id: "s57",
+    text: "Der Plan, wie wir vorgehen wollen, steht fest.",
+    formal: "Pronominalsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„wie“ als Pronominalwort → Pronominalsatz.",
+    explFunktional: "Nebensatz bestimmt „Plan“ näher → Attributsatz.",
+    explInhalt: "Keine Umstandsangabe, sondern inhaltliche Ausgestaltung des Plans."
+  },
+  {
+    id: "s58",
+    text: "Ich weiss, warum du lachst.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„warum“ → indirekter Fragesatz.",
+    explFunktional: "„was weiss ich?“ → Nebensatz als Objekt.",
+    explInhalt: "Der Grund des Lachens ist der Inhalt des Wissens, nicht adverbial zum Matrixverb."
+  },
+  {
+    id: "s59",
+    text: "Wenn du lernst, bestehst du die Prüfung.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für das Bestehen → Adverbialsatz.",
+    explInhalt: "Bedingung → konditionaler Nebensatz."
+  },
+  {
+    id: "s60",
+    text: "Weil du so gut erklärst, verstehe ich alles.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Begründet das Verstehen → Adverbialsatz.",
+    explInhalt: "Grundangabe → kausaler Nebensatz."
+  },
+
+  // 61–70
+  {
+    id: "s61",
+    text: "Der Freund, mit dem ich telefoniere, wohnt in Bern.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „dem“ im Relativgefüge → Relativsatz.",
+    explFunktional: "Nebensatz beschreibt „Freund“ näher → Attributsatz.",
+    explInhalt: "Keine adverbiale, sondern attributive Funktion."
+  },
+  {
+    id: "s62",
+    text: "Wen du auch fragst, niemand weiss die Antwort.",
+    formal: "Uneingeleiteter Nebensatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "Keine Konjunktion, Verbendstellung → uneingeleiteter Nebensatz.",
+    explFunktional: "Nebensatz gibt eine allgemeine Bedingung → Adverbialsatz.",
+    explInhalt: "Unabhängig davon, wen du fragst (Bedingung) → konditional gedeutet."
+  },
+  {
+    id: "s63",
+    text: "Sobald du fertig bist, können wir gehen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Zeitliche Voraussetzung fürs Gehen → Adverbialsatz.",
+    explInhalt: "Zeitlicher Bezug → temporaler Nebensatz."
+  },
+  {
+    id: "s64",
+    text: "Obwohl es kalt ist, schwimmt er im See.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ → Konjunktionalsatz.",
+    explFunktional: "Gegengrund zum Schwimmen → Adverbialsatz.",
+    explInhalt: "Kontrast zur Erwartung → konzessiver Nebensatz."
+  },
+  {
+    id: "s65",
+    text: "Er trainiert, damit er stärker wird.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "final",
+    explFormal: "„damit“ → Konjunktionalsatz.",
+    explFunktional: "Zweck des Trainings → Adverbialsatz.",
+    explInhalt: "Zweckbeziehung → finaler Nebensatz."
+  },
+  {
+    id: "s66",
+    text: "Da sie kein Auto hat, fährt sie mit dem Zug.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„da“ → Konjunktionalsatz.",
+    explFunktional: "Grund fürs Zugfahren → Adverbialsatz.",
+    explInhalt: "Grundangabe → kausaler Nebensatz."
+  },
+  {
+    id: "s67",
+    text: "Indem er langsam sprach, verstand ihn jeder.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„indem“ → Konjunktionalsatz.",
+    explFunktional: "Art und Weise des Sprechens → Adverbialsatz.",
+    explInhalt: "Modaler Nebensatz (Art und Weise)."
+  },
+  {
+    id: "s68",
+    text: "Wenn sie ruft, kommen alle Kinder.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für das Kommen → Adverbialsatz.",
+    explInhalt: "Bedingungsbeziehung → konditionaler Nebensatz."
+  },
+  {
+    id: "s69",
+    text: "Ob wir morgen frei haben, weiss ich nicht.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "„was weiss ich nicht?“ → Nebensatz als Objekt.",
+    explInhalt: "Inhalt des Nichtwissens, kein adverbialer Bezug."
+  },
+  {
+    id: "s70",
+    text: "Die Aufgabe, die wir gestern gelöst haben, war schwer.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „die“ → Relativsatz.",
+    explFunktional: "Nebensatz bestimmt „Aufgabe“ näher → Attributsatz.",
+    explInhalt: "Attributiv, nicht adverbial."
+  },
+
+  // 71–80
+  {
+    id: "s71",
+    text: "Wenn er lacht, wirkt alles leichter.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für die Wirkung → Adverbialsatz.",
+    explInhalt: "Bedingung → konditionaler Nebensatz."
+  },
+  {
+    id: "s72",
+    text: "Seit sie hier arbeitet, läuft alles besser.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„seit“ → Konjunktionalsatz.",
+    explFunktional: "Zeitraum der Verbesserung → Adverbialsatz.",
+    explInhalt: "Zeitliche Dauer → temporaler Nebensatz."
+  },
+  {
+    id: "s73",
+    text: "Weil du geübt hast, gelingt dir die Aufgabe.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Grund für das Gelingen → Adverbialsatz.",
+    explInhalt: "Kausale Beziehung."
+  },
+  {
+    id: "s74",
+    text: "Ob sie kommen, ist noch offen.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "„was ist offen?“ → Nebensatz als Subjekt.",
+    explInhalt: "Fragesachverhalt, kein Umstand."
+  },
+  {
+    id: "s75",
+    text: "Die Schüler, die fleissig arbeiten, bestehen die Prüfung.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „die“ → Relativsatz.",
+    explFunktional: "Nebensatz charakterisiert „Schüler“ → Attributsatz.",
+    explInhalt: "Attributiv, kein Adverbialsatz."
+  },
+  {
+    id: "s76",
+    text: "Wenn du Hilfe brauchst, sag einfach Bescheid.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für „sag Bescheid“ → Adverbialsatz.",
+    explInhalt: "Bedingung → konditionaler Nebensatz."
+  },
+  {
+    id: "s77",
+    text: "Ob er die Wahrheit sagt, bezweifle ich.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Objektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "„was bezweifle ich?“ → Nebensatz als Objekt.",
+    explInhalt: "Inhalt des Zweifelns, kein Umstand."
+  },
+  {
+    id: "s78",
+    text: "Solange es regnet, bleiben wir drinnen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„solange“ → Konjunktionalsatz.",
+    explFunktional: "Dauer des Drinnenbleibens → Adverbialsatz.",
+    explInhalt: "Zeitlicher Rahmen → temporaler Nebensatz."
+  },
+  {
+    id: "s79",
+    text: "Je länger wir warten, desto nervöser werden alle.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„je ... desto“ → Konjunktionalsatz.",
+    explFunktional: "Beschreibt das Verhältnis von Warten und Nervosität → Adverbialsatz.",
+    explInhalt: "Verhältnis / Art und Weise → modaler Nebensatz."
+  },
+  {
+    id: "s80",
+    text: "Weil er Hilfe bekam, konnte er das Projekt abschliessen.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Grund für das Abschliessen → Adverbialsatz.",
+    explInhalt: "Kausale Beziehung."
+  },
+
+  // 81–90
+  {
+    id: "s81",
+    text: "Wenn sie lacht, wirkt der Raum heller.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für die Wirkung → Adverbialsatz.",
+    explInhalt: "Bedingung → konditional."
+  },
+  {
+    id: "s82",
+    text: "Seit wir umgezogen sind, ist der Weg zur Schule kürzer.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„seit“ → Konjunktionalsatz.",
+    explFunktional: "Zeitraum seit dem Umzug → Adverbialsatz.",
+    explInhalt: "Zeitlicher Bezug → temporaler Nebensatz."
+  },
+  {
+    id: "s83",
+    text: "Ob du kommst, spielt für mich eine Rolle.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "Der Nebensatz fungiert als logisches Subjekt.",
+    explInhalt: "Fragesachverhalt, kein Umstand."
+  },
+  {
+    id: "s84",
+    text: "Die Lehrerin, die das Projekt betreut, ist sehr engagiert.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „die“ → Relativsatz.",
+    explFunktional: "Nebensatz bestimmt „Lehrerin“ näher → Attributsatz.",
+    explInhalt: "Attributiv, kein Adverbialsatz."
+  },
+  {
+    id: "s85",
+    text: "Da es schneit, fällt die Stunde aus.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„da“ → Konjunktionalsatz.",
+    explFunktional: "Grund für den Ausfall → Adverbialsatz.",
+    explInhalt: "Kausale Beziehung."
+  },
+  {
+    id: "s86",
+    text: "Obwohl sie Angst hatte, bestieg sie den Turm.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ → Konjunktionalsatz.",
+    explFunktional: "Gegengrund zum Besteigen des Turms → Adverbialsatz.",
+    explInhalt: "Widerspruch zur Erwartung → konzessiver Nebensatz."
+  },
+  {
+    id: "s87",
+    text: "Damit sie nicht stolpert, trägt sie flache Schuhe.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "final",
+    explFormal: "„damit“ → Konjunktionalsatz.",
+    explFunktional: "Zweck des Schuhtragens → Adverbialsatz.",
+    explInhalt: "Finaler Nebensatz (Zweck)."
+  },
+  {
+    id: "s88",
+    text: "Sobald wir Zeit haben, planen wir den Ausflug.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Zeitliche Bedingung fürs Planen → Adverbialsatz.",
+    explInhalt: "Zeitlicher Bezug → temporaler Nebensatz."
+  },
+  {
+    id: "s89",
+    text: "Je mehr sie liest, desto grösser wird ihr Wortschatz.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„je ... desto“ → Konjunktionalsatz.",
+    explFunktional: "Beschreibt das Verhältnis von Lesen und Wortschatz → Adverbialsatz.",
+    explInhalt: "Verhältnis / Art und Weise → modaler Nebensatz."
+  },
+  {
+    id: "s90",
+    text: "Wenn es zu laut ist, kann ich mich nicht konzentrieren.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für Konzentration → Adverbialsatz.",
+    explInhalt: "Bedingungsbeziehung → konditional."
+  },
+
+  // 91–100
+  {
+    id: "s91",
+    text: "Der Film, den wir gestern gesehen haben, war spannend.",
+    formal: "Pronominalsatz / Relativsatz",
+    funktional: "Attributsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "Relativpronomen „den“ → Relativsatz.",
+    explFunktional: "Nebensatz bestimmt „Film“ näher → Attributsatz.",
+    explInhalt: "Attributiv, nicht adverbial."
+  },
+  {
+    id: "s92",
+    text: "Ob wir morgen trainieren, hängt vom Wetter ab.",
+    formal: "Indirekter Fragesatz",
+    funktional: "Subjektsatz",
+    inhalt: "keine adverbiale Bedeutung",
+    explFormal: "„ob“ → indirekter Fragesatz.",
+    explFunktional: "Der Nebensatz steht in Subjektfunktion („was hängt vom Wetter ab?“).",
+    explInhalt: "Fragesachverhalt, kein Umstand."
+  },
+  {
+    id: "s93",
+    text: "Weil die Strasse gesperrt ist, nehmen wir einen Umweg.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Grund für den Umweg → Adverbialsatz.",
+    explInhalt: "Kausaler Nebensatz."
+  },
+  {
+    id: "s94",
+    text: "Obwohl das Wetter schlecht ist, machen wir ein Picknick.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konzessiv",
+    explFormal: "„obwohl“ → Konjunktionalsatz.",
+    explFunktional: "Gegengrund zum Picknick → Adverbialsatz.",
+    explInhalt: "Kontrast zur Erwartung → konzessiver Nebensatz."
+  },
+  {
+    id: "s95",
+    text: "Damit er nicht zu spät kommt, stellt er sich drei Wecker.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "final",
+    explFormal: "„damit“ → Konjunktionalsatz.",
+    explFunktional: "Zweck des Weckerstellens → Adverbialsatz.",
+    explInhalt: "Finaler Nebensatz (Zweck)."
+  },
+  {
+    id: "s96",
+    text: "Sobald die Glocke läutet, ist die Stunde vorbei.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "temporal",
+    explFormal: "„sobald“ → Konjunktionalsatz.",
+    explFunktional: "Bestimmt den Zeitpunkt des Stundenendes → Adverbialsatz.",
+    explInhalt: "Zeitliche Beziehung → temporaler Nebensatz."
+  },
+  {
+    id: "s97",
+    text: "Wenn du die Wahrheit sagst, glaubt dir jeder.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "konditional",
+    explFormal: "„wenn“ → Konjunktionalsatz.",
+    explFunktional: "Bedingung für das Glauben → Adverbialsatz.",
+    explInhalt: "Bedingungsbeziehung → konditional."
+  },
+  {
+    id: "s98",
+    text: "Da er viel Erfahrung hat, bekommt er die Stelle.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„da“ → Konjunktionalsatz.",
+    explFunktional: "Grund für die Stellenvergabe → Adverbialsatz.",
+    explInhalt: "Kausaler Nebensatz."
+  },
+  {
+    id: "s99",
+    text: "Je länger du wartest, desto schwieriger wird es.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "modal",
+    explFormal: "„je ... desto“ → Konjunktionalsatz.",
+    explFunktional: "Verhältnis von Warten und Schwierigkeit → Adverbialsatz.",
+    explInhalt: "Verhältnis / Art und Weise → modaler Nebensatz."
+  },
+  {
+    id: "s100",
+    text: "Weil er so laut redet, verstehen ihn alle gut.",
+    formal: "Konjunktionalsatz",
+    funktional: "Adverbialsatz",
+    inhalt: "kausal",
+    explFormal: "„weil“ → Konjunktionalsatz.",
+    explFunktional: "Grund dafür, dass ihn alle verstehen → Adverbialsatz.",
+    explInhalt: "Kausale Beziehung."
+  }
+];
+
+// ============= Generierung ins HTML =============
+function buildQuiz() {
+  const container = document.getElementById("quiz");
+  let html = "";
+  sentences.forEach((s, idx) => {
+    html += `
+      <div class="question">
+        <h2>Satz ${idx + 1}</h2>
+        <p><i>${s.text}</i></p>
+
+        <div class="select-block">
+          <label>Formale Analyse:</label><br>
+          <select id="${s.id}_formal">
+            <option value="">– wählen –</option>
+            <option>Konjunktionalsatz</option>
+            <option>Pronominalsatz / Relativsatz</option>
+            <option>Indirekter Fragesatz</option>
+            <option>Pronominalsatz</option>
+            <option>Uneingeleiteter Nebensatz</option>
+          </select>
+          <button onclick="checkSentence('${s.id}','formal','${s.formal}','${s.explFormal.replace(/'/g, "&apos;")}')">prüfen</button>
+          <div id="fb_${s.id}_formal"></div>
+        </div>
+
+        <div class="select-block">
+          <label>Funktionale Analyse:</label><br>
+          <select id="${s.id}_funktional">
+            <option value="">– wählen –</option>
+            <option>Subjektsatz</option>
+            <option>Objektsatz</option>
+            <option>Adverbialsatz</option>
+            <option>Attributsatz</option>
+          </select>
+          <button onclick="checkSentence('${s.id}','funktional','${s.funktional}','${s.explFunktional.replace(/'/g, "&apos;")}')">prüfen</button>
+          <div id="fb_${s.id}_funktional"></div>
+        </div>
+
+        <div class="select-block">
+          <label>Inhaltliche Bedeutung:</label><br>
+          <select id="${s.id}_inhalt">
+            <option value="">– wählen –</option>
+            <option>temporal</option>
+            <option>kausal</option>
+            <option>final</option>
+            <option>modal</option>
+            <option>konsekutiv</option>
+            <option>konzessiv</option>
+            <option>konditional</option>
+            <option>keine adverbiale Bedeutung</option>
+          </select>
+          <button onclick="checkSentence('${s.id}','inhalt','${s.inhalt}','${s.explInhalt.replace(/'/g, "&apos;")}')">prüfen</button>
+          <div id="fb_${s.id}_inhalt"></div>
+        </div>
+
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+window.onload = buildQuiz;
+</script>
+</head>
+
+<body>
+<h1>NEBENSATZ-MEGAQUIZ – 100 Sätze, 3-fache Analyse</h1>
+<p>
+Zu jedem Satz bestimmst du:
+<br>1️⃣ die <b>formale Art</b> (Konjunktionalsatz, Relativsatz usw.)
+<br>2️⃣ die <b>funktionale Satzgliedfunktion</b> (Subjekt-, Objekt-, Adverbial-, Attributsatz)
+<br>3️⃣ die <b>inhaltliche Bedeutung</b> (z.B. kausal, temporal, final, konditional …)
+</p>
+
+<div id="quiz"></div>
+
+</body>
+</html>
